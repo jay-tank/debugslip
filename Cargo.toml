@@ -1,0 +1,36 @@
+[package]
+name = "debugslip"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+description = "Flags a #[derive(Debug)] struct/enum with a sensitive-named field (password, secret, token, api_key, ssn, credit_card, ...) typed as a plain String/&str/Vec<u8> instead of a redacting wrapper — derived Debug prints every field verbatim, so a debug!()/println!(\"{:?}\")/anyhow .context() of the value silently leaks the secret."
+repository = "https://github.com/jay-tank/debugslip"
+readme = "README.md"
+keywords = ["rust", "static-analysis", "secrets", "logging", "lint"]
+categories = ["command-line-utilities", "development-tools"]
+# The .rs files under examples/ are fixture *inputs* for debugslip itself
+# (plain source snippets, not meant to be compiled standalone) — disable
+# Cargo's example auto-discovery so it doesn't try to build them as crates.
+autoexamples = false
+
+[lib]
+name = "debugslip"
+path = "src/lib.rs"
+
+[[bin]]
+name = "debugslip"
+path = "src/main.rs"
+
+[dependencies]
+anyhow = "1.0.104"
+clap = { version = "4.6.7", features = ["derive"] }
+proc-macro2 = { version = "1.0.107", features = ["span-locations"] }
+quote = "1.0.47"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+syn = { version = "3.0.6", features = ["full", "extra-traits", "visit"] }
+walkdir = "2.5.0"
+
+[dev-dependencies]
+assert_cmd = "2.2.2"
+predicates = "3.1.4"
